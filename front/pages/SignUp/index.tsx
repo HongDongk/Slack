@@ -1,7 +1,7 @@
 import { Button, Error, Form, Header, Input, Label, LinkContainer } from '@pages/SignUp/styles';
 import useInput from '@hooks/useInput';
 import React, { useCallback, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 
 const SignUp = () => {
@@ -30,7 +30,7 @@ const SignUp = () => {
         return;
       }
       setSignUpError('');
-      setSignUpSuccess(false);
+      setSignUpSuccess(false); // 비동기통신할때 usestate쓸경우 함수안에 초기값 설정해주기!
       axios
         .post('/api/users', { email, nickname, password })
         .then(() => {
@@ -86,7 +86,7 @@ const SignUp = () => {
       </Form>
       <LinkContainer>
         이미 회원이신가요?&nbsp;
-        <a href="/login">로그인 하러가기</a>
+        <Link to="/login">로그인 하러가기</Link>
       </LinkContainer>
     </div>
   );
