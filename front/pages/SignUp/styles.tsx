@@ -44,13 +44,12 @@ export const Input = styled.input`
   padding: 12px;
   height: 44px;
   padding-top: 11px;
-  padding-bottom: 13px;
+  padding-bottom: 10px;
   font-size: 18px;
   line-height: 1.33333333;
 
   &:focus {
     --saf-0: rgba(var(--sk_highlight, 18, 100, 163), 1);
-    box-shadow: 0 0 0 1px var(--saf-0), 0 0 0 5px rgba(29, 155, 209, 0.3);
   }
 `;
 
@@ -85,17 +84,12 @@ export const Button = styled.button`
 
 export const Error = styled.div`
   color: #e01e5a;
-  margin: 8px 0 16px;
-  font-weight: bold;
-`;
-
-export const Success = styled.div`
-  color: #2eb67d;
+  margin: 2px 0 16px;
   font-weight: bold;
 `;
 
 export const LinkContainer = styled.p`
-  font-size: 13px;
+  font-size: 12px;
   color: #616061;
   margin: 0 auto 8px;
   width: 400px;
