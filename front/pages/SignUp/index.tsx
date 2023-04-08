@@ -3,8 +3,13 @@ import useInput from '@hooks/useInput';
 import React, { useCallback, useState } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
+import fetcher from '@utils/fetcher';
+import useSWR from 'swr';
+import Loading from '@components/Loading';
 
 const SignUp = () => {
+  const { data } = useSWR('/api/users', fetcher);
+
   const [email, onChangeEmail] = useInput('');
   const [nickname, onChangeNickname] = useInput('');
   const [password, onChangePassword] = useInput('');
@@ -38,37 +43,44 @@ const SignUp = () => {
           setSignUpSuccess(true);
         })
         .catch((error) => {
-          console.log(error.response?.data);
           setSignUpError(error.response?.data);
         });
     },
     [email, nickname, password, mismatchError],
   );
 
+  if (data === undefined) {
+    return <Loading />;
+  }
+
+  if (data) {
+    return <Redirect to="/login" />;
+  }
+
   return (
-    <div id="container">
+    <div>
       {signUpSuccess && <Redirect to="/login" />}
       <Header>Slack</Header>
       <Form onSubmit={onSubmit}>
-        <Label id="email-label">
+        <Label>
           <span>이메일 주소</span>
           <div>
             <Input type="email" id="email" name="email" value={email} onChange={onChangeEmail} />
           </div>
         </Label>
-        <Label id="nickname-label">
+        <Label>
           <span>닉네임</span>
           <div>
             <Input type="text" id="nickname" name="nickname" value={nickname} onChange={onChangeNickname} />
           </div>
         </Label>
-        <Label id="password-label">
+        <Label>
           <span>비밀번호</span>
           <div>
             <Input type="password" id="password" name="password" value={password} onChange={onChangePassword} />
           </div>
         </Label>
-        <Label id="password-check-label">
+        <Label>
           <span>비밀번호 확인</span>
           <div>
             <Input
@@ -85,7 +97,7 @@ const SignUp = () => {
         <Button type="submit">회원가입</Button>
       </Form>
       <LinkContainer>
-        이미 회원이신가요?&nbsp;
+        이미 회원이신가요?&nbsp;&nbsp;
         <Link to="/login">로그인 하러가기</Link>
       </LinkContainer>
     </div>

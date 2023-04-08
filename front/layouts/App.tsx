@@ -1,9 +1,10 @@
-import loadable from '@loadable/component'; // React에서 코드스플릿팅 해줌
+import loadable from '@loadable/component';
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
-const LogIn = loadable(() => import('@pages/LogIn')); // loadable로 페이지 불러오기
+const LogIn = loadable(() => import('@pages/LogIn')); // loadable로 코드스플릿팅해서 페이지 불러오기
 const SignUp = loadable(() => import('@pages/SignUp'));
+const Channel = loadable(() => import('@pages/Channel'));
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
       </Route>
       <Route path="/login" component={LogIn} />
       <Route path="/signup" component={SignUp} />
+      <Route path="/workspace/channel" component={Channel} />
     </Switch>
   );
 };
