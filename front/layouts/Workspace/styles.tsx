@@ -5,7 +5,7 @@ export const RightMenu = styled.div`
 `;
 
 export const Header = styled.header`
-  height: 38px;
+  height: 50px;
   background: #350d36;
   color: #ffffff;
   box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
@@ -17,8 +17,8 @@ export const ProfileImg = styled.img`
   width: 28px;
   height: 28px;
   position: absolute;
-  top: 5px;
-  right: 16px;
+  top: 10px;
+  right: 30px;
   cursor: pointer;
 `;
 
@@ -156,6 +156,7 @@ export const MenuScroll = styled.div`
 `;
 
 export const WorkspaceModal = styled.div`
+  width: 30px;
   padding: 10px 0 0;
 
   & h2 {
