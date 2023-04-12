@@ -36,7 +36,7 @@ const LogIn = () => {
   );
 
   if (data) {
-    return <Redirect to="/workspace/channel" />;
+    return <Redirect to="/workspace/test/channel/일반" />;
   }
 
   return (

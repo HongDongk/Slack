@@ -156,7 +156,6 @@ export const MenuScroll = styled.div`
 `;
 
 export const WorkspaceModal = styled.div`
-  width: 30px;
   padding: 10px 0 0;
 
   & h2 {

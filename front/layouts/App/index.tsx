@@ -15,8 +15,8 @@ const App = () => {
       </Route>
       <Route path="/login" component={LogIn} />
       <Route path="/signup" component={SignUp} />
-      <Route path="/workspace/channel" component={Channel} />
-      <Route path="/workspace/dm" component={DirectMessage} />
+      <Route path="/workspace/:workspace/channel/:channel" component={Channel} />
+      <Route path="/workspace/:workspace/dm/:id" component={DirectMessage} />
     </Switch>
   );
 };

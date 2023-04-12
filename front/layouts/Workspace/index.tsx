@@ -17,17 +17,20 @@ import {
 } from '@layouts/Workspace/styles';
 import axios from 'axios';
 import React, { FC, useCallback, useState } from 'react';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect, Link, useParams } from 'react-router-dom';
 import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
 import Menu from '@components/Menu';
-import { IUser } from '@typings/db';
+import { IUser, IChannel } from '@typings/db';
 import CreateWorkSpaceModal from '@components/CreateWorkSpaceModal';
 import CreateChannelModal from '@components/CreateChannelModal';
 
 const WorkSpace: FC = ({ children }) => {
   // children이 없는 타입 : FC
-  const { data, mutate } = useSWR<IUser | false>('/api/users', fetcher);
+
+  const { workspace } = useParams<{ workspace: string }>();
+  const { data: userData, mutate } = useSWR<IUser | false>('/api/users', fetcher); // 유저데이터가져오기
+  const { data: channelData } = useSWR<IChannel[]>(userData ? `/api/workspaces/${workspace}/channels` : null, fetcher); // 채널데이터가져오기
 
   const [showUserMenu, setShowUserMenu] = useState(false); // 유저메뉴 보이기
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false); // 워크스페이스 생성모달
@@ -70,7 +73,7 @@ const WorkSpace: FC = ({ children }) => {
     setShowCreateChannelModal(false);
   }, []);
 
-  if (!data) {
+  if (!userData) {
     return <Redirect to="/login" />;
   }
 
@@ -79,14 +82,14 @@ const WorkSpace: FC = ({ children }) => {
       <Header>
         <RightMenu>
           <span onClick={onClickUserProfile}>
-            <ProfileImg src={gravatar.url(data.email, { s: '28px', d: 'retro' })} alt={data.email} />{' '}
+            <ProfileImg src={gravatar.url(userData.email, { s: '28px', d: 'retro' })} alt={userData.email} />{' '}
             {/*아바타아이콘생성*/}
             {showUserMenu && (
               <Menu style={{ right: 0, top: 38 }} show={showUserMenu} onCloseModal={onClickUserProfile}>
                 <ProfileModal>
-                  <img src={gravatar.url(data.email, { s: '36px', d: 'retro' })} alt={data.nickname} />
+                  <img src={gravatar.url(userData.email, { s: '36px', d: 'retro' })} alt={userData.nickname} />
                   <div>
-                    <span id="profile-name">{data.nickname}</span>
+                    <span id="profile-name">{userData.nickname}</span>
                     <span id="profile-active">Active</span>
                   </div>
                 </ProfileModal>
@@ -98,9 +101,9 @@ const WorkSpace: FC = ({ children }) => {
       </Header>
       <WorkspaceWrapper>
         <Workspaces>
-          {data?.Workspaces?.map((a) => {
+          {userData?.Workspaces?.map((a) => {
             return (
-              <Link key={a.id} to={'/workspace/channel/일반'}>
+              <Link key={a.id} to={`/workspace/${a.url}/channel/일반`}>
                 <WorkspaceButton>{a.name.slice(0, 1).toUpperCase()}</WorkspaceButton>
               </Link>
             );
@@ -118,6 +121,9 @@ const WorkSpace: FC = ({ children }) => {
                 <button onClick={onLogout}>로그아웃</button>
               </WorkspaceModal>
             </Menu>
+            {channelData?.map((a) => (
+              <div>{a.name}</div>
+            ))}
           </MenuScroll>
         </Channels>
         <Chats>{children}</Chats>
@@ -131,6 +137,7 @@ const WorkSpace: FC = ({ children }) => {
         show={showCreateChannelModal}
         onCloseModal={onCloseModal}
         setShowCreateChannelModal={setShowCreateChannelModal}
+        toggleWorkspaceModal={toggleWorkspaceModal}
       />
     </div>
   );

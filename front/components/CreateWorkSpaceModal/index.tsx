@@ -1,11 +1,10 @@
 import Modal from '@components/Modal';
 import useInput from '@hooks/useInput';
 import { Button, Input, Label } from '@pages/SignUp/styles';
-import { IChannel, IUser } from '@typings/db';
+import { IUser } from '@typings/db';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
-import React, { useCallback, useState, VFC } from 'react';
-import { useParams } from 'react-router';
+import React, { useCallback, VFC } from 'react';
 import { toast } from 'react-toastify';
 import useSWR from 'swr';
 
@@ -16,7 +15,7 @@ interface Props {
 }
 
 const CreateWorkSpaceModal: VFC<Props> = ({ show, onCloseModal, setShowCreateWorkspaceModal }) => {
-  const { mutate } = useSWR<IUser | false>('/api/users', fetcher);
+  const { mutate: mutateWorkspace } = useSWR<IUser | false>('/api/users', fetcher);
 
   const [newWorkspace, onChangeNewWorkspace, setNewWorkpsace] = useInput('');
   const [newUrl, onChangeNewUrl, setNewUrl] = useInput('');
@@ -38,7 +37,7 @@ const CreateWorkSpaceModal: VFC<Props> = ({ show, onCloseModal, setShowCreateWor
           },
         )
         .then(() => {
-          mutate();
+          mutateWorkspace();
           setShowCreateWorkspaceModal(false);
           setNewWorkpsace('');
           setNewUrl('');
