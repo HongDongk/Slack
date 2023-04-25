@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 const Channel = () => {
   return (
     <WorkSpace>
-      <div>로그인 축하!!!!</div>
+      <div>채널</div>
     </WorkSpace>
   );
 };

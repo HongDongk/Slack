@@ -24,6 +24,7 @@ import Menu from '@components/Menu';
 import { IUser, IChannel } from '@typings/db';
 import CreateWorkSpaceModal from '@components/CreateWorkSpaceModal';
 import CreateChannelModal from '@components/CreateChannelModal';
+import InviteWorkspaceModal from '@components/InviteWorkspaceModal';
 
 const WorkSpace: FC = ({ children }) => {
   // children이 없는 타입 : FC
@@ -36,6 +37,7 @@ const WorkSpace: FC = ({ children }) => {
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false); // 워크스페이스 생성모달
   const [showWorkspaceModal, setShowWorkspaceModal] = useState(false); // 현재 워크 스페이스보이기
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false); // 채널 생성모달
+  const [showInviteWorkspaceModal, setShowInviteWorkspaceModal] = useState(false); // 워크스페이스 사용자초대모달
 
   const onLogout = useCallback(() => {
     axios
@@ -67,10 +69,15 @@ const WorkSpace: FC = ({ children }) => {
     setShowCreateChannelModal(true);
   }, []);
 
+  const onClickInviteWorkspace = useCallback(() => {
+    setShowInviteWorkspaceModal(true);
+  }, []);
+
   const onCloseModal = useCallback(() => {
     setShowCreateWorkspaceModal(false);
     setShowWorkspaceModal(false);
     setShowCreateChannelModal(false);
+    setShowInviteWorkspaceModal(false);
   }, []);
 
   if (!userData) {
@@ -111,18 +118,17 @@ const WorkSpace: FC = ({ children }) => {
           <AddButton onClick={onClickCreateWorkspace}>+</AddButton>
         </Workspaces>
         <Channels>
-          <WorkspaceName onClick={toggleWorkspaceModal}>Slack</WorkspaceName>
+          <WorkspaceName onClick={toggleWorkspaceModal}>{workspace} +</WorkspaceName>
           <MenuScroll>
             <Menu show={showWorkspaceModal} onCloseModal={toggleWorkspaceModal} style={{ top: 95, left: 80 }}>
               <WorkspaceModal>
-                <h2>Slack</h2>
-                {/* <button onClick={onClickInviteWorkspace}>워크스페이스에 사용자 초대</button> */}
+                <h2>{workspace} WorkSpace</h2>
+                <button onClick={onClickInviteWorkspace}>워크스페이스에 사용자 초대</button>
                 <button onClick={onClickAddChannel}>채널 만들기</button>
-                <button onClick={onLogout}>로그아웃</button>
               </WorkspaceModal>
             </Menu>
             {channelData?.map((a) => (
-              <div>{a.name}</div>
+              <div># {a.name}</div>
             ))}
           </MenuScroll>
         </Channels>
@@ -137,6 +143,12 @@ const WorkSpace: FC = ({ children }) => {
         show={showCreateChannelModal}
         onCloseModal={onCloseModal}
         setShowCreateChannelModal={setShowCreateChannelModal}
+        toggleWorkspaceModal={toggleWorkspaceModal}
+      />
+      <InviteWorkspaceModal
+        show={showInviteWorkspaceModal}
+        onCloseModal={onCloseModal}
+        setShowInviteWorkspaceModal={setShowInviteWorkspaceModal}
         toggleWorkspaceModal={toggleWorkspaceModal}
       />
     </div>
