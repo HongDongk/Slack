@@ -22,6 +22,8 @@ import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
 import Menu from '@components/Menu';
 import { IUser, IChannel } from '@typings/db';
+import ChannelList from '@components/ChannelList';
+import DMList from '@components/DMList';
 import CreateWorkSpaceModal from '@components/CreateWorkSpaceModal';
 import CreateChannelModal from '@components/CreateChannelModal';
 import InviteWorkspaceModal from '@components/InviteWorkspaceModal';
@@ -31,7 +33,6 @@ const WorkSpace: FC = ({ children }) => {
 
   const { workspace } = useParams<{ workspace: string }>();
   const { data: userData, mutate } = useSWR<IUser | false>('/api/users', fetcher); // 유저데이터가져오기
-  const { data: channelData } = useSWR<IChannel[]>(userData ? `/api/workspaces/${workspace}/channels` : null, fetcher); // 채널데이터가져오기
 
   const [showUserMenu, setShowUserMenu] = useState(false); // 유저메뉴 보이기
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false); // 워크스페이스 생성모달
@@ -118,7 +119,7 @@ const WorkSpace: FC = ({ children }) => {
           <AddButton onClick={onClickCreateWorkspace}>+</AddButton>
         </Workspaces>
         <Channels>
-          <WorkspaceName onClick={toggleWorkspaceModal}>{workspace} +</WorkspaceName>
+          <WorkspaceName onClick={toggleWorkspaceModal}>{workspace}</WorkspaceName>
           <MenuScroll>
             <Menu show={showWorkspaceModal} onCloseModal={toggleWorkspaceModal} style={{ top: 95, left: 80 }}>
               <WorkspaceModal>
@@ -127,9 +128,8 @@ const WorkSpace: FC = ({ children }) => {
                 <button onClick={onClickAddChannel}>채널 만들기</button>
               </WorkspaceModal>
             </Menu>
-            {channelData?.map((a) => (
-              <div># {a.name}</div>
-            ))}
+            <ChannelList />
+            <DMList />
           </MenuScroll>
         </Channels>
         <Chats>{children}</Chats>
