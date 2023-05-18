@@ -29,8 +29,6 @@ import CreateChannelModal from '@components/CreateChannelModal';
 import InviteWorkspaceModal from '@components/InviteWorkspaceModal';
 
 const WorkSpace: FC = ({ children }) => {
-  // children이 없는 타입 : FC
-
   const { workspace } = useParams<{ workspace: string }>();
   const { data: userData, mutate } = useSWR<IUser | false>('/api/users', fetcher); // 유저데이터가져오기
 
